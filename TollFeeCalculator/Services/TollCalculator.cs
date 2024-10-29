@@ -17,7 +17,7 @@ namespace TollFeeCalculator.Services
          * @return - the total toll fee for that day
          */
 
-        public int GetTotalTollFee(Vehicle vehicle, DateTime[] dates)
+        public int GetTotalTollFee(IVehicle vehicle, DateTime[] dates)
         {
             DateTime intervalStart = dates[0];
             int totalFee = 0;
@@ -58,7 +58,7 @@ namespace TollFeeCalculator.Services
                    vehicleType.Equals(TollFreeVehicles.Military.ToString());
         }
 
-        public int CalculateTollFeeForDate(DateTime date, Vehicle vehicle)
+        public int CalculateTollFeeForDate(DateTime date, IVehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
 
