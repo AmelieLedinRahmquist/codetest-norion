@@ -23,7 +23,7 @@ public class TollCalculator
             int tempFee = GetTollFee(intervalStart, vehicle);
 
             long diffInMillies = date.Millisecond - intervalStart.Millisecond;
-            long minutes = diffInMillies/1000/60;
+            long minutes = diffInMillies / 1000 / 60;
 
             if (minutes <= 60)
             {
@@ -43,7 +43,7 @@ public class TollCalculator
     private bool IsTollFreeVehicle(Vehicle vehicle)
     {
         if (vehicle == null) return false;
-        String vehicleType = vehicle.GetVehicleType();
+        string vehicleType = vehicle.GetVehicleType();
         return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
                vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
                vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||

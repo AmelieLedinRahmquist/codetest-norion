@@ -8,6 +8,6 @@ namespace TollFeeCalculator.Interfaces
 {
     public interface IVehicle
     {
-        String GetVehicleType();
+        string GetVehicleType();
     }
 }
