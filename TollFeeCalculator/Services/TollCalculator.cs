@@ -60,7 +60,43 @@ namespace TollFeeCalculator.Services
             return totalFee;
         }
 
-        private bool IsTollFreeVehicle(Vehicle vehicle)
+        public int CalculateTollFeeForTimestamp(DateTime tollPassingTimestamp, IVehicle vehicle)
+        {
+            if (IsDateTollFree(tollPassingTimestamp) || IsVehicleTollFree(vehicle)) return 0;
+
+            int hour = tollPassingTimestamp.Hour;
+            int minute = tollPassingTimestamp.Minute;
+
+            // Calculate the toll fee in SEK based on the hour and minute of the toll passing
+            switch (hour)
+            {
+                case 6:
+                    return (minute <= 29) ? 8 : 13; //For 6:00 to 6:29 return 8, for 6:30 to 6:59 return 13
+                case 7:
+                    return 18;
+                case 8:
+                    return (minute <= 29) ? 13 : 8; //For 8:00 to 8:29 return 13, for 8:30 to 8:59 return 8
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                    return 8; //For 9:00 to 14:59 return 8
+                case 15:
+                    return (minute <= 29) ? 13 : 18; //For 15:00 to 15:29 return 13, for 15:30 to 15:59 return 18
+                case 16:
+                    return 18;
+                case 17:
+                    return 13;
+                case 18:
+                    return (minute <= 29) ? 8 : 0; //For 18:00 to 18:29 return 8, for 18:30 to 18:59 return 0
+                default:
+                    return 0; //For all other hours, return 0
+            }
+        }
+
+        private bool IsVehicleTollFree(Vehicle vehicle)
         {
             if (vehicle == null) return false;
             string vehicleType = vehicle.GetVehicleType();
@@ -72,26 +108,7 @@ namespace TollFeeCalculator.Services
                    vehicleType.Equals(TollFreeVehicles.Military.ToString());
         }
 
-        public int CalculateTollFeeForTimestamp(DateTime date, IVehicle vehicle)
-        {
-            if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
-
-            int hour = date.Hour;
-            int minute = date.Minute;
-
-            if (hour == 6 && minute >= 0 && minute <= 29) return 8;
-            else if (hour == 6 && minute >= 30 && minute <= 59) return 13;
-            else if (hour == 7 && minute >= 0 && minute <= 59) return 18;
-            else if (hour == 8 && minute >= 0 && minute <= 29) return 13;
-            else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return 8;
-            else if (hour == 15 && minute >= 0 && minute <= 29) return 13;
-            else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return 18;
-            else if (hour == 17 && minute >= 0 && minute <= 59) return 13;
-            else if (hour == 18 && minute >= 0 && minute <= 29) return 8;
-            else return 0;
-        }
-
-        private Boolean IsTollFreeDate(DateTime date)
+        private Boolean IsDateTollFree(DateTime date)
         {
             int year = date.Year;
             int month = date.Month;
