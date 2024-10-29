@@ -9,39 +9,53 @@ namespace TollFeeCalculator.Services
     public class TollCalculator
     {
 
-        /**
-         * Calculate the total toll fee for one day
-         *
-         * @param vehicle - the vehicle
-         * @param dates   - date and time of all passes on one day
-         * @return - the total toll fee for that day
-         */
-
-        public int GetTotalTollFee(IVehicle vehicle, DateTime[] dates)
+        /// <summary>
+        /// Calculates the total toll fee for a vehicle during a day based on toll passes.
+        /// </summary>
+        /// <param name="vehicle">The vehicle for which the toll fee is calculated</param>
+        /// <param name="tollPassingTimestamps">An array of DateTime with the timestamps of all the toll passes for the vehicle on that day.</param>
+        /// <returns>The total toll fee for that day, at a maximum of 60 SEK.</returns>
+        public int GetTotalTollFee(IVehicle vehicle, DateTime[] tollPassingTimestamps)
         {
-            DateTime intervalStart = dates[0];
+            if (tollPassingTimestamps.Length == 0) return 0;//Return 0 if there are no timestamps
+
+            DateTime firstTollPassing = tollPassingTimestamps[0];
             int totalFee = 0;
+            int firstTollPassingFee = CalculateTollFeeForTimestamp(firstTollPassing, vehicle);
+            totalFee += firstTollPassingFee;
 
+            DateTime previousTollPassing = firstTollPassing;
+            int previousTollPassingFee = firstTollPassingFee;
 
-            foreach (DateTime date in dates)
+            for (int i = 1; i < tollPassingTimestamps.Length; i++)
             {
-                int nextFee = CalculateTollFeeForDate(date, vehicle);
-                int tempFee = CalculateTollFeeForDate(intervalStart, vehicle);
+                DateTime currentTollPassing = tollPassingTimestamps[i];
+                int currentTollPassingFee = CalculateTollFeeForTimestamp(currentTollPassing, vehicle);
 
-                long diffInMillies = date.Millisecond - intervalStart.Millisecond;
-                long minutes = diffInMillies / 1000 / 60;
+                //Calculate the difference in minutes between the current and previous toll passing
+                double minutesBetweenPassings = (currentTollPassing - previousTollPassing).TotalMinutes;
 
-                if (minutes <= 60)
+                //If the difference in minutes is less than or equal to 60
+                if (minutesBetweenPassings <= 60)
                 {
-                    if (totalFee > 0) totalFee -= tempFee;
-                    if (nextFee >= tempFee) tempFee = nextFee;
-                    totalFee += tempFee;
+                    //If the current toll fee is greater than or equal to the previous toll fee
+                    if (currentTollPassingFee >= previousTollPassingFee)
+                    {
+                        totalFee -= previousTollPassingFee;
+                        totalFee += currentTollPassingFee;
+                    }
                 }
+                //If the difference between passings are more than 60 minutes, add the current toll fee to the total fee
                 else
                 {
-                    totalFee += nextFee;
+                    totalFee += currentTollPassingFee;
                 }
+                //Update the previous toll passing and fee variables for the next iteration
+                previousTollPassing = currentTollPassing;
+                previousTollPassingFee = currentTollPassingFee;
             }
+
+            //If the total fee is greater than 60, set it to 60
             if (totalFee > 60) totalFee = 60;
             return totalFee;
         }
@@ -58,7 +72,7 @@ namespace TollFeeCalculator.Services
                    vehicleType.Equals(TollFreeVehicles.Military.ToString());
         }
 
-        public int CalculateTollFeeForDate(DateTime date, IVehicle vehicle)
+        public int CalculateTollFeeForTimestamp(DateTime date, IVehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
 
