@@ -60,6 +60,12 @@ namespace TollFeeCalculator.Services
             return totalFee;
         }
 
+        /// <summary>
+        /// Calculates the toll fee for a vehicle passing a toll at a specific timestamp.
+        /// </summary>
+        /// <param name="tollPassingTimestamp">The date and time of the toll passing.</param>
+        /// <param name="vehicle">The vehicle passing through the toll.</param>
+        /// <returns>The toll fee in SEK for this toll passing.</returns>
         public int CalculateTollFeeForTimestamp(DateTime tollPassingTimestamp, IVehicle vehicle)
         {
             if (IsDateTollFree(tollPassingTimestamp) || IsVehicleTollFree(vehicle)) return 0;
