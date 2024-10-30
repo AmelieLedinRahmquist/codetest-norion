@@ -9,6 +9,6 @@ namespace TollFeeCalculator.Interfaces
     public interface IVehicle
     {
         string GetVehicleType();
-        bool IsVehicleTollFree { get; }
+        bool IsTollFree { get; }
     }
 }

@@ -102,16 +102,15 @@ namespace TollFeeCalculator.Services
             }
         }
 
+        /// <summary>
+        /// Checks if a vehicle is toll free.
+        /// </summary>
+        /// <param name="vehicle">The vehicle that is checked.</param>
+        /// <returns>True if the vehicle is toll free, false otherwise.</returns>
         private bool IsVehicleTollFree(IVehicle vehicle)
         {
             if (vehicle == null) return false;
-            string vehicleType = vehicle.GetVehicleType();
-            return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Diplomat.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Foreign.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Military.ToString());
+            return vehicle.IsTollFree;
         }
 
         private Boolean IsDateTollFree(DateTime date)

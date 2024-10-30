@@ -9,6 +9,6 @@ namespace TollFeeCalculator.Models.Vehicle
     public class Foreign : IVehicle
     {
         public string GetVehicleType() => "Foreign";
-        public bool IsVehicleTollFree() => true;
+        public bool IsTollFree => true;
     }
 }
