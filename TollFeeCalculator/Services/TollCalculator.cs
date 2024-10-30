@@ -102,7 +102,7 @@ namespace TollFeeCalculator.Services
             }
         }
 
-        private bool IsVehicleTollFree(Vehicle vehicle)
+        private bool IsVehicleTollFree(IVehicle vehicle)
         {
             if (vehicle == null) return false;
             string vehicleType = vehicle.GetVehicleType();

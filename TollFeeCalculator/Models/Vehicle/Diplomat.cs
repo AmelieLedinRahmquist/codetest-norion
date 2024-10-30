@@ -8,9 +8,7 @@ namespace TollFeeCalculator.Models.Vehicle
 {
     public class Diplomat : IVehicle
     {
-        public string GetVehicleType()
-        {
-            return "Diplomat";
-        }
+        public string GetVehicleType() => "Diplomat";
+        public bool IsVehicleTollFree() => true;
     }
 }
