@@ -117,7 +117,7 @@ namespace TollFeeCalculator.Services
             return vehicle.IsTollFree;
         }
 
-        private Boolean IsDateTollFree(DateTime date)
+        private bool IsDateTollFree(DateTime date)
         {
             int year = date.Year;
             int month = date.Month;
