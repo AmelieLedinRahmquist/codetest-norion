@@ -17,6 +17,10 @@ namespace TollFeeCalculator.Services
         /// <returns>The total toll fee for that day, at a maximum of 60 SEK.</returns>
         public int GetTotalTollFee(IVehicle vehicle, DateTime[] tollPassingTimestamps)
         {
+            if (vehicle == null)//Check if the vehicle variable is null
+            {
+                throw new ArgumentNullException("Vehicle cannot be null");
+            }
             if (tollPassingTimestamps.Length == 0) return 0;//Return 0 if there are no timestamps
 
             DateTime firstTollPassing = tollPassingTimestamps[0];
