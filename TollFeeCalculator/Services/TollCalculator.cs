@@ -43,7 +43,7 @@ namespace TollFeeCalculator.Services
                 //If the difference in minutes is less than or equal to 60
                 if (minutesBetweenPassings <= 60)
                 {
-                    //If the current toll fee is greater than or equal to the previous toll fee
+                    //If the current toll fee is greater than or equal to the previous toll fee, subtract the previous fee and add the current fee to the total fee
                     if (currentTollPassingFee >= previousTollPassingFee)
                     {
                         totalFee -= previousTollPassingFee;
