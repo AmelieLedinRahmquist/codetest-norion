@@ -6,10 +6,8 @@ using TollFeeCalculator.Interfaces;
 
 namespace TollFeeCalculator.Services
 {
-
     public class TollCalculator
     {
-
         /// <summary>
         /// Calculates the total toll fee for a vehicle during a day based on toll passes.
         /// </summary>
@@ -125,8 +123,8 @@ namespace TollFeeCalculator.Services
         /// <returns>True if the date is toll free, false otherwise.</returns>
         private bool IsDateTollFree(DateTime date)
         {
-            //Checks if the date is a Saturday or Sunday and returns true if it is
-            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+            //Checks if the date is a Saturday, Sunday or if the month is July and returns true if it is
+            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday || date.Month == 7)
             {
                 return true;
             }
